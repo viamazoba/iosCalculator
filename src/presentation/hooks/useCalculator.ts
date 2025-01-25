@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable curly */
 import { useEffect, useRef, useState } from 'react';
 
@@ -18,14 +19,21 @@ export const useCalculator = () => {
     const lastOperation = useRef<Operator>();
 
     useEffect(() => {
+
         if (lastOperation.current) {
             const firstFormulaPart = formula.split(' ').at(0);
             setFormula(`${firstFormulaPart} ${lastOperation.current} ${number}`);
         } else {
             setFormula(number);
         }
-        setFormula(number);
+
     }, [number]);
+
+    useEffect(() => {
+        const subResult = calculaSubResult();
+        setPrevNumber(`${subResult}`);
+
+    }, [formula]);
 
     const clean = () => {
         setNumber('0');
@@ -85,6 +93,7 @@ export const useCalculator = () => {
     };
 
     const setLastNumber = () => {
+        calculateResult();
 
         if (number.endsWith('.')) {
             setPrevNumber(number.slice(0, -1));
@@ -92,6 +101,7 @@ export const useCalculator = () => {
             setPrevNumber(number);
         }
 
+        //setFormula(`${formula} ${lastOperation.current} ${number}`);
         setNumber('0');
     };
 
